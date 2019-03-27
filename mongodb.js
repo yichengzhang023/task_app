@@ -17,5 +17,5 @@ MongoClient.connect(connectionURL, {
             'Age': 27
         }
     )
-    // console.log("connect sucucessfully!")
+    // console.log("connect successfully!")
 })
