@@ -1,8 +1,11 @@
-const mongodb = require("mongodb")
-const MongoClient = mongodb.MongoClient
+const {MongoClient, ObjectID} = require("mongodb")
+const id = new ObjectID()
 
 const connectionURL = "mongodb://127.0.0.1:27017"
 const databaseName = "task_manager"
+
+console.log(id)
+console.log(id.getTimestamp())
 
 MongoClient.connect(connectionURL, {
     useNewUrlParser: true
@@ -22,20 +25,14 @@ MongoClient.connect(connectionURL, {
 
     // })
 
-    // db.collection('users').insertMany([{
-    //     'name': 'Harry',
-    //     'age': 27
-    // }, {
-    //     'name': 'Yolanda',
-    //     'age': 27
-    // }], (error, result) => {
-    //     if (error) {
-    //         return console.log('Unable to insert these documents')
-    //     }
-    //     console.log(result.ops)
-    // })
-
-    db.collection('users').find({})
-
+    db.collection('users').findOne({name: 'Yolanda'}, (error,user)=>{
+        if(error){
+            return console.log('Unable to fetch')
+        }
+        console.log(user)
+    })
+    db.collection('users').find({age: 27}).toArray((error,users)=>{
+        console.log(users)
+    })
     // console.log("connect successfully!")
 })
