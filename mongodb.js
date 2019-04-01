@@ -1,4 +1,7 @@
-const {MongoClient, ObjectID} = require("mongodb")
+const {
+    MongoClient,
+    ObjectID
+} = require("mongodb")
 const id = new ObjectID()
 
 const connectionURL = "mongodb://127.0.0.1:27017"
@@ -25,14 +28,33 @@ MongoClient.connect(connectionURL, {
 
     // })
 
-    db.collection('users').findOne({name: 'Yolanda'}, (error,user)=>{
-        if(error){
+    db.collection('users').findOne({
+        name: 'Yolanda'
+    }, (error, user) => {
+        if (error) {
             return console.log('Unable to fetch')
         }
         console.log(user)
     })
-    db.collection('users').find({age: 27}).toArray((error,users)=>{
+    db.collection('users').find({
+        age: 27
+    }).toArray((error, users) => {
         console.log(users)
     })
+
+    const updatePromise = db.collection('users').updateOne({
+        _id: '5c9f4d0922a2ac20f89f90db'
+    }, {
+        $set: {
+            name: 'Mike'
+        }
+    })
+
+    updatePromise.then((result) => {
+        console.log(result)
+    }).catch(
+        (error) => {
+            console.log(error)
+        })
     // console.log("connect successfully!")
 })
