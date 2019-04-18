@@ -29,33 +29,54 @@ const User = moongose.model('user', {
                 throw new Error('Not a validate E-mail address')
             }
         }
+    },
+    password: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 7,
+        validate(){
+            if (value.toLowerCase().includes('password')){
+                throw new Error('Password cannot contain "password"')
+            }
+        }
     }
 })
 
 const Tasks = moongose.model('tasks', {
     description: {
-        type: String
+        type: String,
+        required: true,
+        trim: true
     },
     completed: {
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 })
 
+const task = new Tasks({
+    description: 'this is a  test  ',
+})
 
 const user1 = new User({
-    name: 'Yicheng',
-    age: -1
+    name: '',
+    age: -1,
+    email: '123@qq21312com',
+    password: '     ree     '
 })
 
 user1.save().then(() => {
     console.log(user1)
 }).catch((error) => {
+    console.log('name: ', error.errors.name.message)
     console.log('email: ', error.errors.email.message)
     console.log('Age: ', error.errors.age.message)
+    console.log('Password: ', error.errors.password.message)
 })
 
-// task1.save().then(() => {
-//     console.log(task1)
-// }).catch((error) => {
-//     console.log('Error: ', error)
-// })
+task.save().then(() => {
+    console.log(task)
+}).catch((error) => {
+    console.log('Error: ', error)
+})
