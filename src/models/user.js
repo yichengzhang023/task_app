@@ -18,6 +18,7 @@ const userSchema = new moongose.Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: true,
         trim: true,
         validate(value) {
@@ -39,7 +40,23 @@ const userSchema = new moongose.Schema({
     }
 })
 
-userSchema.pre('save', async function (next) {  //middleware 
+userSchema.statics.findByCredentials = async (email, password) => {
+    const user = await User.findOne({
+        email
+    })
+    if (!user) {
+        throw new Error('Unable to Login')
+    }
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if (!isMatch) {
+        throw new Error('Unable to Login')
+    }
+
+    return user
+}
+
+userSchema.pre('save', async function (next) { //middleware 
     const user = this
 
     if (user.isModified('password')) {
